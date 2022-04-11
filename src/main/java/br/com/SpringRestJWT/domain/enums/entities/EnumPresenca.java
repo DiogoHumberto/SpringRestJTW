@@ -1,4 +1,4 @@
-package br.com.SpringRestJTW.domain.enums.entities;
+package br.com.SpringRestJWT.domain.enums.entities;
 
 public enum EnumPresenca {
 

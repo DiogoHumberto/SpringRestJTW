@@ -1,4 +1,4 @@
-package br.com.SpringRestJTW.domain.entities;
+package br.com.SpringRestJWT.domain.entities;
 
 import java.util.Date;
 
@@ -10,8 +10,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -19,7 +17,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import br.com.SpringRestJTW.domain.enums.entities.EnumPresenca;
+import br.com.SpringRestJWT.domain.enums.entities.EnumGenero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,32 +28,37 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "convite", uniqueConstraints = @UniqueConstraint(columnNames = {"id_pessoa", "id_evento"}))
+@Table(name = "pessoa", uniqueConstraints = @UniqueConstraint(columnNames = {"nome", "sobrenome"}))
 @EntityListeners(AuditingEntityListener.class)
-public class Convite {
+public class Pessoa {
 	
 	@Id
-	@Column(name = "id_convite")
+	@Column(name = "id_pessoa")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne
-    @JoinColumn(name = "id_pessoa")
-	private Pessoa pessoa;
+	@Column(name = "nome")
+	private String nome;
 	
-	@ManyToOne
-    @JoinColumn(name = "id_evento")
-	private Evento evento;	
+	@Column(name = "sobrenome")
+	private String sobrenome;
+	
+	@Column(name = "dt_nascimento")
+	private Date dtNascimento;
+	
+	@Column(name = "email")
+	private String email;
 	
 	@Enumerated(EnumType.STRING)
-	private EnumPresenca statusPresenca;	
+	@Column(name = "genero")
+	private EnumGenero genero;
 	
 	@CreatedDate
-	@Column(name = "dt_convite")
-	private Date dtConvite;
+	@Column(name = "criado_em")
+	private Date criadoEm;
 
 	@LastModifiedDate
 	@Column(name = "modificado_em")
 	private Date modificadoEm;
-
 }
+
