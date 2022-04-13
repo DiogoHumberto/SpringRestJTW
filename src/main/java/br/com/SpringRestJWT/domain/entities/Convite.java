@@ -41,7 +41,7 @@ public class Convite {
 	
 	@ManyToOne
     @JoinColumn(name = "id_pessoa")
-	private Pessoa pessoa;
+	private Usuario pessoa;
 	
 	@ManyToOne
     @JoinColumn(name = "id_evento")

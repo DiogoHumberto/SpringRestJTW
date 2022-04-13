@@ -1,4 +1,4 @@
-package br.com.SpringRestJWT.Controller;
+package br.com.SpringRestJWT.controllers;
 
 import java.net.URI;
 
@@ -21,41 +21,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.SpringRestJWT.Controller.dtos.PessoaDto;
-import br.com.SpringRestJWT.services.PessoaService;
+import br.com.SpringRestJWT.controllers.dtos.UsuarioDto;
+import br.com.SpringRestJWT.services.UsuarioSerive;
 
 @RestController
-@RequestMapping("/pessoa")
-public class PessoaController {
+@RequestMapping("/usuario")
+public class UsuarioController {
 
 	@Autowired
-	private PessoaService service;
+	private UsuarioSerive service;
 
 	@PostMapping(value = "/salvar", produces = "application/json")
-	@CacheEvict(value = "listarPessoas", allEntries = true)
-	public ResponseEntity<PessoaDto> salvarPessoa(@RequestBody @Valid PessoaDto reqDto,
+	@CacheEvict(value = "listarUsuario", allEntries = true)
+	public ResponseEntity<UsuarioDto> salvarUsuario(@RequestBody @Valid UsuarioDto reqDto,
 			UriComponentsBuilder uriBuilder) {
 
-		PessoaDto respDto = service.salvarPessoa(reqDto);
+		UsuarioDto respDto = service.salvarUsuario(reqDto);
 		URI uri = uriBuilder.path("/usuario/{email}").buildAndExpand(respDto.getEmail()).toUri();
 
 		return ResponseEntity.created(uri).body(respDto);
 	}
 
 	@GetMapping(value = "/{email}", produces = "application/json")
-	public ResponseEntity<PessoaDto> buscarPessoaEmail(@PathVariable(value = "email") @Email @Valid String email) {
+	public ResponseEntity<UsuarioDto> buscarPessoaEmail(@PathVariable(value = "email") @Email @Valid String email) {
 
-		return ResponseEntity.ok(service.buscarPessoaEmail(email));
+		return ResponseEntity.ok(service.buscarEmail(email));
 
 	}
 	
 	@GetMapping(value = "/listar", produces = "application/json")
-	@Cacheable(value = "listarPessoas")
-	public ResponseEntity<Page<PessoaDto>> listarPessoas(
-			@PageableDefault(sort = "nome", direction = Direction.DESC) Pageable pagPessoaDto) {
+	@Cacheable(value = "listarUsuario")
+	public ResponseEntity<Page<UsuarioDto>> listarPessoas(
+			@PageableDefault(sort = "nome", direction = Direction.DESC) Pageable pagDto) {
 		
-		return ResponseEntity.ok(service.listarPessoas(pagPessoaDto));
-		
+		return ResponseEntity.ok(service.listarUsuario(pagDto));		
 
 	}
 

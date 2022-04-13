@@ -1,10 +1,9 @@
-package br.com.SpringRestJWT.Controller.dtos;
+package br.com.SpringRestJWT.controllers.dtos;
 
 import java.util.Date;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -17,14 +16,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PessoaDto {
+public class UsuarioDto {
 	
 	@NotBlank
 	private String nome;	
 	
 	private String sobrenome;
 	
-	@NotNull
 	@JsonFormat
     (shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private Date dtNascimento;
@@ -32,6 +30,9 @@ public class PessoaDto {
 	@NotBlank
 	@Email(message = "inválido")
 	private String email;
+	
+	@NotBlank
+	private String password;
 	
 	private Date criadoEm;
 	
