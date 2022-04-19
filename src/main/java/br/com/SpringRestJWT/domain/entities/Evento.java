@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -40,6 +41,10 @@ public class Evento {
 	
 	@Column(name = "nome")
 	private String nome;
+	
+	@ManyToOne
+    @JoinColumn(name = "id_usuario")
+	private Usuario usuario;
 	
 	@Column(name = "dt_evento")
 	private Date dtEvento;

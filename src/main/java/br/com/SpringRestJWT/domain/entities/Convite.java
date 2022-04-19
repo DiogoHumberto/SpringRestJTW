@@ -40,8 +40,8 @@ public class Convite {
 	private Long id;
 	
 	@ManyToOne
-    @JoinColumn(name = "id_pessoa")
-	private Usuario pessoa;
+    @JoinColumn(name = "id_usuario")
+	private Usuario usuario;
 	
 	@ManyToOne
     @JoinColumn(name = "id_evento")
