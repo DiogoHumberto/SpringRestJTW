@@ -34,8 +34,12 @@ public class UsuarioDto {
 	@NotBlank
 	private String password;
 	
+	@JsonFormat
+    (shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private Date criadoEm;
 	
+	@JsonFormat
+    (shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private Date dtModificacao;
 	
 	//private EnumGenero genero;

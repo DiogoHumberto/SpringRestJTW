@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "convite", uniqueConstraints = @UniqueConstraint(columnNames = {"id_pessoa", "id_evento"}))
+@Table(name = "convite", uniqueConstraints = @UniqueConstraint(columnNames = {"id_usuario", "id_evento"}))
 @EntityListeners(AuditingEntityListener.class)
 public class Convite {
 	

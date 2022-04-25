@@ -7,9 +7,13 @@ import java.util.stream.Collectors;
 
 import javax.validation.constraints.Email;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,6 +32,8 @@ import br.com.SpringRestJWT.repositories.UsuarioRepository;
 
 @Service
 public class UsuarioSerive implements UserDetailsService, ApplicationRunner {
+	
+	private static Logger LOGGER = LoggerFactory.getLogger(UsuarioSerive.class);
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -58,7 +64,8 @@ public class UsuarioSerive implements UserDetailsService, ApplicationRunner {
 		
 		return user.get();
 	}
-
+	
+	@CachePut(value = "buscaUsuarioEmail", key = "#reqDto.email")
 	public UsuarioDto salvarUsuario(UsuarioDto reqDto) {
 
 		Optional<Usuario> pessoaExist = usuarioRepository.findByEmail(reqDto.getEmail());

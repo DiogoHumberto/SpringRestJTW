@@ -41,7 +41,7 @@ public class AuthService {
 		return gerarToken(authentication);
 		
 	}
-	
+
 	public Usuario getUsuarioAutenticado(String token) {
 		Claims claims = Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token).getBody();
 		
