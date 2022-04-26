@@ -1,5 +1,6 @@
 package br.com.SpringRestJWT.domain.entities;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
@@ -37,8 +38,13 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "usuario", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 @EntityListeners(AuditingEntityListener.class)
-public class Usuario {
+public class Usuario implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1129101199514298775L;
+
 	@Id
 	@Column(name = "id_usuario")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

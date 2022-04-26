@@ -7,6 +7,7 @@ import javax.naming.AuthenticationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,7 +43,8 @@ public class AuthService {
 		return gerarToken(authentication);
 		
 	}
-
+	
+	@Cacheable(value="Usuario", key="#token")
 	public Usuario getUsuarioAutenticado(String token) {
 		Claims claims = Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token).getBody();
 		

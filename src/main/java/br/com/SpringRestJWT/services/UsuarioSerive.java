@@ -48,8 +48,7 @@ public class UsuarioSerive implements UserDetailsService, ApplicationRunner {
 					.password(passwordEncoder.encode("123456"))
 					.roles(Arrays.asList(new Role("ROLE_MASTER")))
 					.build());
-		}
-		
+		}		
 	}
 	
 	protected Usuario buscarUsuarioEmail(String email) {
