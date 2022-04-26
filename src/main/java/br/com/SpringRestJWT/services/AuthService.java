@@ -1,5 +1,6 @@
 package br.com.SpringRestJWT.services;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.naming.AuthenticationException;
@@ -62,7 +63,8 @@ public class AuthService {
 	}
 	
 	private TokenDto gerarToken(Authentication authentication) {
-		Date dtAtual = new Date();
+
+		Date dtAtual = Calendar.getInstance().getTime();
 		
 		return TokenDto.builder()
 			.type("Bearer")

@@ -4,12 +4,11 @@ import java.net.URI;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -36,7 +35,7 @@ public class UsuarioController {
 	private UsuarioSerive service;
 
 	@PostMapping(value = "/salvar", produces = "application/json")
-	@CacheEvict(cacheNames = "listarUsuario" , key="#root.method.name")
+	//@CacheEvict(cacheNames = "listarUsuario" , key="#root.method.name")
 	public ResponseEntity<UsuarioDto> salvarUsuario(@RequestBody @Valid UsuarioDto reqDto,
 			UriComponentsBuilder uriBuilder) {
 
@@ -48,7 +47,7 @@ public class UsuarioController {
 
 	@GetMapping(value = "/{email}", produces = "application/json")
 	//@Cacheable(value = "buscaUsuarioEmail", key="#email")
-	public ResponseEntity<UsuarioDto> buscarPessoaEmail(@PathVariable(value = "email") @Email @Valid String email) {
+	public ResponseEntity<UsuarioDto> buscarPessoaEmail(@PathVariable(value = "email") @Valid @NotEmpty @Email String email) {
 
 		return ResponseEntity.ok(service.buscarEmail(email));
 

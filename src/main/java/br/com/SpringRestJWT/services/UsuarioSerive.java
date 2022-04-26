@@ -7,13 +7,9 @@ import java.util.stream.Collectors;
 
 import javax.validation.constraints.Email;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,12 +24,13 @@ import br.com.SpringRestJWT.controllers.dtos.UsuarioDto;
 import br.com.SpringRestJWT.domain.entities.Role;
 import br.com.SpringRestJWT.domain.entities.Usuario;
 import br.com.SpringRestJWT.domain.mappers.UsuarioMapper;
+import br.com.SpringRestJWT.exception.BadRequestException;
 import br.com.SpringRestJWT.repositories.UsuarioRepository;
 
 @Service
 public class UsuarioSerive implements UserDetailsService, ApplicationRunner {
 	
-	private static Logger LOGGER = LoggerFactory.getLogger(UsuarioSerive.class);
+	//private static Logger LOGGER = LoggerFactory.getLogger(UsuarioSerive.class);
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -59,13 +56,12 @@ public class UsuarioSerive implements UserDetailsService, ApplicationRunner {
 		
 		Optional<Usuario> user = usuarioRepository.findByEmail(email);
 		if (!user.isPresent()) {
-			throw new UsernameNotFoundException("usuário não encontrado!");
+			throw new BadRequestException("usuário não encontrado!");
 		}
 		
 		return user.get();
 	}
 	
-	@CachePut(value = "buscaUsuarioEmail", key = "#reqDto.email")
 	public UsuarioDto salvarUsuario(UsuarioDto reqDto) {
 
 		Optional<Usuario> pessoaExist = usuarioRepository.findByEmail(reqDto.getEmail());
@@ -81,7 +77,7 @@ public class UsuarioSerive implements UserDetailsService, ApplicationRunner {
 
 		Optional<Usuario> user = usuarioRepository.findByEmail(email);
 		if (!user.isPresent()) {
-			throw new UsernameNotFoundException("usuário não encontrado!");
+			throw new BadRequestException("usuário não encontrado!");
 		}
 
 		return UsuarioMapper.toDto(user.get());

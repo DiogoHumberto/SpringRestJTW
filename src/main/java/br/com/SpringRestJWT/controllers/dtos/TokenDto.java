@@ -17,14 +17,14 @@ public class TokenDto {
 	
 	private String type;
 	
-	private String token;
+	private String token;	
 	
 	@JsonFormat
-    (shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
+    (shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss", locale = "pt-BR", timezone = "Brazil/East")
 	private Date createIn;
 	
 	@JsonFormat
-    (shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
+    (shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss", locale = "pt-BR", timezone = "Brazil/East")
 	private Date expirationIn;
 
 }

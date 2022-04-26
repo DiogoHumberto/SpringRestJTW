@@ -1,6 +1,7 @@
 package br.com.SpringRestJWT.exception.handler;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -16,10 +17,12 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 import org.springframework.web.context.request.WebRequest;
 
+import br.com.SpringRestJWT.exception.BadRequestException;
 import br.com.SpringRestJWT.exception.dto.ErroFormDto;
 import br.com.SpringRestJWT.exception.dto.ExceptionResponseDto;
 
@@ -32,6 +35,7 @@ public class ValidationHandler {
 	
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ResponseBody
 	public List<ErroFormDto> handle(MethodArgumentNotValidException exception) {
 		List<ErroFormDto> dto = new ArrayList<>();
 		
@@ -44,9 +48,9 @@ public class ValidationHandler {
 		return dto;
 	}
 	
-	@ExceptionHandler({ BadRequest.class})
+	@ExceptionHandler({BadRequestException.class , BadRequest.class})
 	public final ResponseEntity<ExceptionResponseDto> handleAllExceptionsNotFound(Exception ex, WebRequest request) {
-		ExceptionResponseDto exceptionResponse = new ExceptionResponseDto(new Date() , ex.getMessage(), request.getDescription(false));
+		ExceptionResponseDto exceptionResponse = new ExceptionResponseDto(Calendar.getInstance().getTime() , ex.getMessage(), request.getDescription(false));
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
 	}
 	
