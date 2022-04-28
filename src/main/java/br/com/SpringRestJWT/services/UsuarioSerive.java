@@ -14,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,9 +22,11 @@ import org.springframework.stereotype.Service;
 import br.com.SpringRestJWT.controllers.dtos.UsuarioDto;
 import br.com.SpringRestJWT.domain.entities.Role;
 import br.com.SpringRestJWT.domain.entities.Usuario;
+import br.com.SpringRestJWT.domain.enums.Booleano;
 import br.com.SpringRestJWT.domain.mappers.UsuarioMapper;
 import br.com.SpringRestJWT.exception.BadRequestException;
 import br.com.SpringRestJWT.repositories.UsuarioRepository;
+import br.com.SpringRestJWT.validators.dto.UsuarioDetails;
 
 @Service
 public class UsuarioSerive implements UserDetailsService, ApplicationRunner {
@@ -45,6 +46,7 @@ public class UsuarioSerive implements UserDetailsService, ApplicationRunner {
 					.nome("diogo")
 					.sobrenome("Humberto")
 					.email("diogohumbertoo@gmail.com")
+					.isMaster(Booleano.SIM)
 					.password(passwordEncoder.encode("123456"))
 					.roles(Arrays.asList(new Role("ROLE_MASTER")))
 					.build());
@@ -68,8 +70,17 @@ public class UsuarioSerive implements UserDetailsService, ApplicationRunner {
 			
 			throw new UsernameNotFoundException("Já existe usuario cadastrado com esse email!");			
 		}
+		
+		Usuario newUsuario = Usuario.builder()
+			.nome(reqDto.getNome())
+			.sobrenome(reqDto.getSobrenome())
+			.dtNascimento(reqDto.getDtNascimento())
+			.email(reqDto.getEmail())
+			.password(passwordEncoder.encode(reqDto.getPassword()))
+			.roles(Arrays.asList(new Role("USER")))
+			.build();
 
-		return UsuarioMapper.toDto(usuarioRepository.save(UsuarioMapper.toEntity(reqDto)));
+		return UsuarioMapper.toDto(usuarioRepository.save(newUsuario));
 	}
 
 	public UsuarioDto buscarEmail(@Email String email) {
@@ -92,15 +103,27 @@ public class UsuarioSerive implements UserDetailsService, ApplicationRunner {
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UsuarioDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
 		Optional<Usuario> user = usuarioRepository.findByEmail(username);
 		if (!user.isPresent()) {
 			throw new UsernameNotFoundException("usuário ou senha inválido!");
 		}
 		
-		return new org.springframework.security.core.userdetails.User(user.get().getEmail(), user.get().getPassword(),
-				mapRolesToAuthorities(user.get().getRoles()));
+		Usuario usuario = user.get();
+		
+		return new UsuarioDetails(usuario.getEmail(),
+                usuario.getPassword(),
+                usuario.getStatus().getValorBooleano(),
+                usuario.getIsAdmin().getValorBooleano(),
+                usuario.getIsMaster().getValorBooleano(),
+                true,
+                true,
+                true,
+                mapRolesToAuthorities(usuario.getRoles()));
+		
+//		return new org.springframework.security.core.userdetails.User(user.get().getEmail(), user.get().getPassword(),
+//				mapRolesToAuthorities(user.get().getRoles()));
 	}
 	
 	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {

@@ -54,7 +54,7 @@ public class ValidationHandler {
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
 	}
 	
-	@ExceptionHandler(ServiceException.class)
+	@ExceptionHandler({ServiceException.class, ClassCastException.class})
 	public final ResponseEntity<ExceptionResponseDto> handleAllExceptionsServer(Exception ex, WebRequest request) {
 		ExceptionResponseDto exceptionResponse = new ExceptionResponseDto(new Date() , ex.getMessage(), request.getDescription(false));
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);

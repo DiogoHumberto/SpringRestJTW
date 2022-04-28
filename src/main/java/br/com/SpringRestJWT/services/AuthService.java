@@ -20,7 +20,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-@Service
+@Service("authService")
 public class AuthService {
 	
 	@Value("${api.jwt.expiration}")
@@ -34,6 +34,19 @@ public class AuthService {
 	
 	@Autowired
 	private UsuarioSerive usuarioService;
+	
+    public Boolean temPermissao(Authentication authentication, String permissao, Boolean opcao){
+    	
+    	Usuario usuario = (Usuario) authentication.getPrincipal();
+    	
+        if(permissao.equals("isAdmin")){
+        	return usuario.getIsAdmin().getValorBooleano();
+        } else if (permissao.equals("isMaster")){
+            return usuario.getIsMaster().getValorBooleano();
+        } else {
+            return false;
+        }
+    }
 	
 	public TokenDto autenticar(FormAuthDto formDto) throws AuthenticationException {
 		

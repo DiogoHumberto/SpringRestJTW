@@ -23,8 +23,8 @@ public class UsuarioMapper {
 				.sobrenome(entity.getSobrenome())
 				.dtNascimento(entity.getDtNascimento())
 				.email(entity.getEmail())
-				.criadoEm(entity.getDtCriadoEm())
-				.dtModificacao(entity.getDtModificadoEm())
+				.criadoEm(entity.getCreatedAt())
+				.dtModificacao(entity.getUpdatedAt())
 				.build();
 				
 	}

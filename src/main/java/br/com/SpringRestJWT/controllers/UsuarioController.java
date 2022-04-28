@@ -24,6 +24,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.SpringRestJWT.controllers.dtos.UsuarioDto;
 import br.com.SpringRestJWT.services.UsuarioSerive;
+import br.com.SpringRestJWT.validators.OnlyAdminOrMaster;
 
 @RestController
 @RequestMapping("/usuario")
@@ -33,7 +34,8 @@ public class UsuarioController {
 	
 	@Autowired
 	private UsuarioSerive service;
-
+	
+	@OnlyAdminOrMaster
 	@PostMapping(value = "/salvar", produces = "application/json")
 	//@CacheEvict(cacheNames = "listarUsuario" , key="#root.method.name")
 	public ResponseEntity<UsuarioDto> salvarUsuario(@RequestBody @Valid UsuarioDto reqDto,
