@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +24,7 @@ public class EventoController {
 	private EventoService eventoService;
 	
 	@PostMapping
-	public ResponseEntity<EventoDto> createEvento(@Valid FormEventoDto reqDto, UriComponentsBuilder uriBuilder){
+	public ResponseEntity<EventoDto> createEvento(@Valid FormEventoDto reqDto, UriComponentsBuilder uriBuilder, Authentication authentication ){
 		
 		EventoDto respDto = eventoService.createEvento(reqDto);
 		URI uri = uriBuilder.path("/evento/{id}").buildAndExpand(respDto.getId()).toUri();

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.constraints.Email;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -18,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import br.com.SpringRestJWT.controllers.dtos.UsuarioDto;
 import br.com.SpringRestJWT.domain.entities.Role;
@@ -68,7 +70,7 @@ public class UsuarioSerive implements UserDetailsService, ApplicationRunner {
 		Optional<Usuario> pessoaExist = usuarioRepository.findByEmail(reqDto.getEmail());
 		if (pessoaExist.isPresent()) {
 			
-			throw new UsernameNotFoundException("Já existe usuario cadastrado com esse email!");			
+			throw new BadRequestException("Já existe usuario cadastrado com esse email!");			
 		}
 		
 		Usuario newUsuario = Usuario.builder()
@@ -81,6 +83,24 @@ public class UsuarioSerive implements UserDetailsService, ApplicationRunner {
 			.build();
 
 		return UsuarioMapper.toDto(usuarioRepository.save(newUsuario));
+	}
+	
+	public UsuarioDto alterar(UsuarioDto reqDto) {
+		
+		Optional<Usuario> pessoaExist = usuarioRepository.findByEmail(reqDto.getEmail());
+		if (!pessoaExist.isPresent()) {
+			
+			throw new BadRequestException("Não existe usuario cadastrado com esse email!");			
+		}
+
+		BeanUtils.copyProperties(reqDto, pessoaExist.get(), "password");
+
+		pessoaExist.get()
+				.setPassword(StringUtils.hasText(reqDto.getPassword()) ? passwordEncoder.encode(reqDto.getPassword())
+						: pessoaExist.get().getPassword());
+
+		return UsuarioMapper.toDto(usuarioRepository.save(pessoaExist.get()));
+				
 	}
 
 	public UsuarioDto buscarEmail(@Email String email) {
